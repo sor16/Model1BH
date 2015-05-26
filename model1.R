@@ -24,9 +24,8 @@ RC$Sinvmu=RC$Sig_xinv%*%RC$mu_x;
 
 
 
-#axel/begin
+# axel/begin/26.05.15
 
-#addpath(genpath(pwd));  ??
 
 
 #%import data from text file that has water level measurements in cm in left
@@ -42,8 +41,8 @@ wq = as.matrix(read.table('15.txt'))
  
 RC$y=log(wq[,2]);
 RC$w=0.01*wq[,1];
-RC$w_tild=RC$w-RC$w(1);
+RC$w_tild=RC$w-RC$w[1];
 RC$n=length(RC$y);
 
-#axel/end
+#axel/end/26.05.15/virkar
 
