@@ -1,3 +1,6 @@
+
+library(ggplot2)
+
 Nit=20000
 dataset=15
 
@@ -46,3 +49,50 @@ RC$n=length(RC$y);
 
 #axel/end/26.05.15/virkar
 
+
+#axel/begin/27.05.15
+
+
+#axel: teiknar upp punktana Q á móti H
+# figure(1);hold off;
+# scatter(RC.w,wq(:,2),'.');
+
+H=RC$w
+Q=wq[,2]
+dat=data.frame(H,Q)
+
+
+ggplot(dat,aes(x=H,y=Q))+geom_point(shape=1)+theme_bw()
+
+# Dens =@(t)-DensEvalm11(t,RC);
+# 
+# %
+# [t_m,~,~,~,~,H]=fminunc(Dens,zeros(2,1));
+# 
+# 
+# l_m=log(RC.w_tild+exp(t_m(1)));
+# 
+# X_m=[ones(size(l_m)),l_m];
+# L=chol(RC.Sig_xinv+X_m'*X_m/exp(t_m(2)))';
+#        
+#        mu=L'\(L\(RC.Sinvmu+X_m'*RC.y/exp(t_m(2))));
+# hold on;plot(RC.w,exp(X_m*mu));
+# 
+# 
+# varappr=diag(X_m*inv(RC.Sig_xinv+X_m'*X_m/exp(t_m(2)))*X_m')+exp(t_m(2));
+#              %[norminv(0.025,0,sqrt(varappr)) norminv(0.975,0,sqrt(varappr))]
+#              
+#              %Ã–ryggisbil Ã¡ logskala fyrir mÃ¦lingar (empirical bayes)
+#              %Xm*mu %<- mÃ¶t y_hat 
+#              
+#              %axel: ég kommentaði út Xm*mu hér fyrir ofan
+#              
+#              [X_m*mu+norminv(0.025,0,sqrt(varappr)) X_m*mu+norminv(0.975,0,sqrt(varappr))]
+#              
+#              
+#              %LH=chol(H)'/0.42;
+# LH=chol(H)'/(2.38/sqrt(2));
+#              %LH=chol(H)';
+# 
+
+#axel/end/27.05.15
