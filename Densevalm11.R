@@ -4,9 +4,9 @@ Denseval11 <- function(t,RC){
   l=log(RC$w_tild+exp(t(1)))
   #l=RC$wtild %>% + exp(t(1)) %>% log()
   X=c(rep(1,length(l)),l)
-  
-  L=(RC$Sig_xinv+as.matrix(X)%*%X/exp(t(2))) %>% chol() %>% t();
-  q=(RC$Sinvmu+as.matrix(X)*RC$y/exp(t(2)))/L; #ATH. vandamal med namespace t()
+  L=t(chol(RC$Sig_xinv + (as.matrix(X) %*% X)/exp(t(2))))
+  #L=(RC$Sig_xinv+as.matrix(X)%*%X/exp(t(2))) %>% chol() %>% t();
+  q=(RC$Sinvmu+as.matrix(X)*RC$y/exp(t(2)))/L;
   #Sölvi end
   #Sölvi begin 27.mai
   p=0.5*sum(q^2)+log(L[1,1])+log(L[2,2]) 

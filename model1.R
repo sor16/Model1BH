@@ -41,9 +41,12 @@ wq = as.matrix(read.table('15.txt'))
 #wq=importdata([num2str(dataset) '.txt']);
 
 
- 
+#qwdata=read.table('15.txt')
+#names(qwdata)=c("W","Q")
+#qwdata$Qlog=log(qwdata$Q)
+#RC$qwdata=qwdata
 RC$y=log(wq[,2]);
-RC$w=0.01*wq[,1];
+RC$w=0.01*wq[,1]; #Gögn frá Met Office benda til þess að hæðin sé mæld í cm nú þegar
 RC$w_tild=RC$w-RC$w[1];
 RC$n=length(RC$y);
 
