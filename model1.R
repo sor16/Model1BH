@@ -69,8 +69,11 @@ dat=data.frame(H,Q)
 ggplot(dat,aes(x=H,y=Q))+geom_point(shape=1)+theme_bw()
 
 # Dens =@(t)-DensEvalm11(t,RC);
-# 
-# %
+Dens <- function(t) -Denseval11(t,RC)
+
+optim(par=c(0,0),Dens,hessian=TRUE)
+
+
 # [t_m,~,~,~,~,H]=fminunc(Dens,zeros(2,1));
 # 
 # 
