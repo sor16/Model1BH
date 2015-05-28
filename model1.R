@@ -47,7 +47,7 @@ wq = as.matrix(read.table('15.txt'))
 #RC$qwdata=qwdata
 ################
 RC$y=log(wq[,2]);
-RC$w=0.01*wq[,1]; 
+RC$w=0.01*wq[,1]; #to meters 
 RC$w_tild=RC$w-RC$w[1];
 RC$n=length(RC$y);
 
