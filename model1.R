@@ -68,7 +68,11 @@ dat=data.frame(H,Q)
 
 ggplot(dat,aes(x=H,y=Q))+geom_point(shape=1)+theme_bw()
 
-# Dens =@(t)-DensEvalm11(t,RC);
+
+#axel/end/27.05.15/virkar
+
+#axel/begin/28.05.15
+
 # 
 # %
 # [t_m,~,~,~,~,H]=fminunc(Dens,zeros(2,1));
@@ -97,6 +101,3 @@ ggplot(dat,aes(x=H,y=Q))+geom_point(shape=1)+theme_bw()
 #              %LH=chol(H)'/0.42;
 # LH=chol(H)'/(2.38/sqrt(2));
 #              %LH=chol(H)';
-# 
-
-#axel/end/27.05.15
