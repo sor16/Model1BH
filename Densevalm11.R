@@ -24,5 +24,5 @@ Denseval11 <- function(th,RC){
   
   D=-2*sum(log(dlnorm(exp(RC$y),X%*%x,sqrt(exp(th[2])))))
   
-  return(-p,)
+  return(-p)
 }
