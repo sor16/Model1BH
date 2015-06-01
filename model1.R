@@ -85,13 +85,13 @@ optim(par=c(0,0),Dens,hessian=TRUE)
 # [t_m,~,~,~,~,H]=fminunc(Dens,zeros(2,1));
 # 
 # 
-l_m=log(RC$w_tild+exp(t_m[1]));
+l_m=as.matrix(log(RC$w_tild+exp(t_m[1]))); #samanburdur stodst
 
-X_m=cbind(matrix(1,nrow(l_m),ncol(l_m)),l_m);
+X_m=cbind(matrix(1,nrow(l_m),ncol(l_m)),l_m); #samanburdur stodst
 
-L=t(chol(RC$Sig_xinv+t(X_m)%*%X_m/exp(t_m[2])));
+L=t(chol(RC$Sig_xinv+t(X_m)%*%X_m/exp(t_m[2]))); #samanburdur stodst
 
-mu=solve(t(L),(solve(L,(RC$Sinvmu+t(X_m)%*%RC$y/exp(t_m[2])))));
+mu=solve(t(L),(solve(L,(RC$Sinvmu+t(X_m)%*%RC$y/exp(t_m[2]))))); #samanburdur stodst
 
 
 # hold on
@@ -99,9 +99,10 @@ mu=solve(t(L),(solve(L,(RC$Sinvmu+t(X_m)%*%RC$y/exp(t_m[2])))));
 plot(RC$w,exp(X_m*mu)); #axel: nota ggplot2? 
 
 
-v_temp=X_m%*%solve(RC$Sig_xinv+t(X_m)%*%solve(X_m,exp(t_m[2]))%*%t(X_m)
+v_temp=X_m%*%solve(RC$Sig_xinv+t(X_m)%*%solve(X_m,exp(t_m[2]))%*%t(X_m)) #
+                  
                    
-                   varappr=diag(v_temp,nrow=length())+exp(t_m[2]);
+varappr=diag(v_temp,nrow=length())+exp(t_m[2]);
                    
                    #axel/end/28.05.15
 #              %[norminv(0.025,0,sqrt(varappr)) norminv(0.975,0,sqrt(varappr))]
