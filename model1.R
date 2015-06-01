@@ -74,7 +74,7 @@ ggplot(dat,aes(x=H,y=Q))+geom_point(shape=1)+theme_bw()
 
 
 #Dens =@(t)-DensEvalm11(t,RC);
-Dens <- function(th){ Denseval11(th,RC)$p}
+Dens <- function(th){ Denseval11(th,RC)$pmin}
 Densmin=optim(par=c(0,0),Dens,hessian=TRUE)
 Densmin$value=t_m 
 Densmin$value=H
@@ -100,12 +100,13 @@ mu=solve(t(L),(solve(L,(RC$Sinvmu+t(X_m)%*%RC$y/exp(t_m[2]))))); #samanburdur st
 plot(RC$w,exp(X_m*mu)); #axel: nota ggplot2? 
 
 
-v_temp=X_m%*%solve(RC$Sig_xinv+t(X_m)%*%solve(X_m,exp(t_m[2]))%*%t(X_m)) #
-                  
-                   
-varappr=diag(v_temp,nrow=length())+exp(t_m[2]);
+v_temp=X_m%*%solve(RC$Sig_xinv+t(X_m)%*%X_m/exp(t_m[2]))%*%t(X_m) #samanburdur stodst
+
+
+varappr=as.matrix(diag(v_temp)+exp(t_m[2])); #samanburdur stodst
                    
                    #axel/end/28.05.15
+
 #              %[norminv(0.025,0,sqrt(varappr)) norminv(0.975,0,sqrt(varappr))]
 #              
 #              %Ã–ryggisbil Ã¡ logskala fyrir mÃ¦lingar (empirical bayes)
