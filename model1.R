@@ -1,4 +1,4 @@
-
+library(stats)
 library(ggplot2)
 
 Nit=20000
@@ -46,8 +46,8 @@ wq = as.matrix(read.table('15.txt'))
 #qwdata$Qlog=log(qwdata$Q)
 #RC$qwdata=qwdata
 ################
-RC$y=log(wq[,2]);
-RC$w=0.01*wq[,1]; 
+RC$y=as.matrix(log(wq[,2]));
+RC$w=0.01*wq[,1]; #to meters 
 RC$w_tild=RC$w-RC$w[1];
 RC$n=length(RC$y);
 
@@ -68,13 +68,16 @@ dat=data.frame(H,Q)
 
 ggplot(dat,aes(x=H,y=Q))+geom_point(shape=1)+theme_bw()
 
-
 #axel/end/27.05.15/virkar
 
 #axel/begin/28.05.15
 
-# 
-# %
+
+#Dens =@(t)-DensEvalm11(t,RC);
+Dens <- function(th){ Denseval11(th,RC)}
+optim(par=c(0,0),Dens,hessian=TRUE)
+
+
 # [t_m,~,~,~,~,H]=fminunc(Dens,zeros(2,1));
 # 
 # 
