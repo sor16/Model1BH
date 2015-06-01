@@ -113,9 +113,11 @@ varappr=as.matrix(diag(v_temp)+exp(t_m[2])); #samanburdur stodst
 #              %Xm*mu %<- mÃ¶t y_hat 
 #              
 #              %axel: ég kommentaði út Xm*mu hér fyrir ofan
+#              axel: norminv sama og qnorm í R
 #              
 #              [X_m*mu+norminv(0.025,0,sqrt(varappr)) X_m*mu+norminv(0.975,0,sqrt(varappr))]
-#              
+
+cbind(X_m%*%+qnorm(0.025,0,sqrt(varappr)),X_m%*%qnorm(qnorm(0.975,0,sqrt(varappr))))
 #              
 #              %LH=chol(H)'/0.42;
 # LH=chol(H)'/(2.38/sqrt(2));
