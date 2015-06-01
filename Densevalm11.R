@@ -12,9 +12,9 @@ Denseval11 <- function(th,RC){
   #Solvi end
   
   #Solvi begin 27.mai
-  p=0.5*sum(q^2)+log(L[1,1])+log(L[2,2]) 
-  -0.5*sum(RC$y^2)/exp(th[2])-RC$n*th[2]/2 
-  +th[1]-exp(th[1])*RC$mu_c-th[2]
+  p=0.5*sum(q^2)+log(L[1,1])+log(L[2,2])- 
+  0.5*sum(RC$y^2)/exp(th[2])-RC$n*th[2]/2 +
+  th[1]-exp(th[1])*RC$mu_c-th[2]
   
   x=solve(t(L),(q+as.matrix(rnorm(2))))
   
@@ -24,5 +24,5 @@ Denseval11 <- function(th,RC){
   
   D=-2*sum(log(dlnorm(exp(RC$y),X%*%x,sqrt(exp(th[2])))))
   
-  return(list("p"=p,"x"=x,"yp"=yp,"ypo"=ypo,"D"=D))
+  return(-p,)
 }
