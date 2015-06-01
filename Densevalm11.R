@@ -3,8 +3,7 @@ Denseval11 <- function(th,RC){
   
   #hugsanlega onnur breytunofn
   l=log(RC$w_tild+exp(th[1]))
-  
-  X=matrix(nrow=length(l),c(rep(1,length(l)),l))
+  X=cbind(rep(1,length(l)),l)
   
   L=t(chol(RC$Sig_xinv + (t(X) %*% X)/exp(th[2])))
   
