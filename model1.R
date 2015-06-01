@@ -76,8 +76,8 @@ ggplot(dat,aes(x=H,y=Q))+geom_point(shape=1)+theme_bw()
 #Dens =@(t)-DensEvalm11(t,RC);
 Dens <- function(th){ Denseval11(th,RC)$pmin}
 Densmin=optim(par=c(0,0),Dens,hessian=TRUE)
-Densmin$value=t_m 
-Densmin$value=H
+t_m=Densmin$par
+H=Densmin$hessian
 
 #axel/begin/28.05.15
 
@@ -97,7 +97,7 @@ mu=solve(t(L),(solve(L,(RC$Sinvmu+t(X_m)%*%RC$y/exp(t_m[2]))))); #samanburdur st
 
 # hold on
 
-plot(RC$w,exp(X_m*mu)); #axel: nota ggplot2? 
+plot(RC$w,exp(X_m%*%mu),type="l"); #axel: nota ggplot2? 
 
 
 v_temp=X_m%*%solve(RC$Sig_xinv+t(X_m)%*%X_m/exp(t_m[2]))%*%t(X_m) #samanburdur stodst
@@ -117,8 +117,20 @@ varappr=as.matrix(diag(v_temp)+exp(t_m[2])); #samanburdur stodst
 #              
 #              [X_m*mu+norminv(0.025,0,sqrt(varappr)) X_m*mu+norminv(0.975,0,sqrt(varappr))]
 
-cbind(X_m%*%+qnorm(0.025,0,sqrt(varappr)),X_m%*%qnorm(qnorm(0.975,0,sqrt(varappr))))
-#              
+confinterval= cbind(X_m%*%mu+qnorm(0.025,0,sqrt(varappr)),X_m%*%mu+qnorm(0.975,0,sqrt(varappr))) #samanburdur stodst
+
+LH=t(chol(H))/(2.38/sqrt(2)) #Hvadan kemur thessi tala?? 2.38
+
 #              %LH=chol(H)'/0.42;
 # LH=chol(H)'/(2.38/sqrt(2));
 #              %LH=chol(H)';
+# t1=zeros(4,Nit); %axel: skipun í R er matrix(0,4,Nit)
+# t2=zeros(4,Nit);
+# t3=zeros(4,Nit);
+# t4=zeros(4,Nit);
+
+t1=matrix(0,4,Nit)
+t2=matrix(0,4,Nit)
+t3=matrix(0,4,Nit)
+t4=matrix(0,4,Nit)
+
