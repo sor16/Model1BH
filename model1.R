@@ -164,8 +164,8 @@ for(j in 1:4){
     ypo_new=Densnew$ypo
     D_new=Densnew$D
     
-    log(R)=p_new-p_old
-    if (log(R)>log(runif(1))){
+    logR=p_new-p_old
+    if (logR>log(runif(1))){
         t_old=t_new
         x_old=x_new
         p_old=p_new
@@ -183,46 +183,41 @@ for(j in 1:4){
     D[i]=D_old
   }
   
-  if(j==1)
+  if(j==1){
     t1=t
     yp1=yp
     ypo1=ypo
     D1=D
-  else if(j==2)
+  } else if(j==2){
     t2=t
     yp2=yp
     ypo2=ypo
     D2=D
-  else if(j==3)
+  } else if(j==3){
     t3=t
     yp3=yp
     ypo3=ypo
     D3=D
-  else if(j==4)
+  } else if(j==4){
     t4=t
     yp4=yp
     ypo4=ypo
     D4=D
+  }
 }
-  
-# for j=1:4
-# t_old=t_m;
-# t=zeros(4,Nit);
-# [p_old,x_old,yp_old,ypo_old,D_old]=DensEvalm11(t_old,RC);
-# for i=1:Nit
-# t_new=t_old+(LH'\normrnd(0,1,[2,1]));
-#         [p_new,x_new,yp_new,ypo_new,D_new]=DensEvalm11(t_new,RC);
-#         logR=p_new-p_old;
-#         if logR>log(rand(1))
-#             t_old=t_new;
-#             x_old=x_new;
-#             p_old=p_new;
-#             yp_old=yp_new;
-#             ypo_old=ypo_new;
-#             D_old=D_new;
-#         end
-#         t(:,i)=[t_old;x_old];
-#         yp(:,i)=yp_old;
-#         ypo(:,i)=ypo_old;
-#         D(1,i)=D_old;
-#     end
+
+
+Dhat=-2*sum(log(dlnorm(exp(RC$y),X_m%*%mu,sqrt(exp(t_m[2])))))
+Davg=mean(c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)]))
+pd=Davg-Dhat
+DIC=Dhat+2*pd
+B=1/(mean(0.5*c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)])))
+
+c(Dhat, Davg, DIC, pd, B) #afhverju thessi vigur?
+
+# Dhat=-2*sum(log(lognpdf(exp(RC.y),X_m*mu,sqrt(exp(t_m(2))))));
+# Davg=mean([D1(2000:5:20000) D2(2000:5:20000) D3(2000:5:20000) D4(2000:5:20000)]);
+# pd=Davg-Dhat;
+# DIC=Dhat+2*pd;
+# B=1/mean(exp(0.5*[D1(2000:5:20000) D2(2000:5:20000) D3(2000:5:20000) D4(2000:5:20000)]));
+# [Dhat Davg DIC pd B]
