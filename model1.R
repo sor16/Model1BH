@@ -76,7 +76,7 @@ ggplot(dat,aes(x=H,y=Q))+geom_point(shape=1)+theme_bw()
 #Dens =@(t)-DensEvalm11(t,RC);
 Dens <- function(th){ Denseval11(th,RC)$pmin}
 Densmin=optim(par=c(0,0),Dens,hessian=TRUE)
-t_m=Densmin$par
+t_m=as.matrix(Densmin$par)
 H=Densmin$hessian
 
 #axel/begin/28.05.15
@@ -86,13 +86,13 @@ H=Densmin$hessian
 # [t_m,~,~,~,~,H]=fminunc(Dens,zeros(2,1));
 # 
 # 
-l_m=as.matrix(log(RC$w_tild+exp(t_m[1]))); #samanburdur stodst
+l_m=as.matrix(log(RC$w_tild+exp(t_m[1,]))); #samanburdur stodst
 
 X_m=cbind(matrix(1,nrow(l_m),ncol(l_m)),l_m); #samanburdur stodst
 
-L=t(chol(RC$Sig_xinv+t(X_m)%*%X_m/exp(t_m[2]))); #samanburdur stodst
+L=t(chol(RC$Sig_xinv+t(X_m)%*%X_m/exp(t_m[2,]))); #samanburdur stodst
 
-mu=solve(t(L),(solve(L,(RC$Sinvmu+t(X_m)%*%RC$y/exp(t_m[2]))))); #samanburdur stodst
+mu=solve(t(L),(solve(L,(RC$Sinvmu+t(X_m)%*%RC$y/exp(t_m[2,]))))); #samanburdur stodst
 
 
 # hold on
@@ -100,10 +100,10 @@ mu=solve(t(L),(solve(L,(RC$Sinvmu+t(X_m)%*%RC$y/exp(t_m[2]))))); #samanburdur st
 plot(RC$w,exp(X_m%*%mu),type="l"); #axel: nota ggplot2? 
 
 
-v_temp=X_m%*%solve(RC$Sig_xinv+t(X_m)%*%X_m/exp(t_m[2]))%*%t(X_m) #samanburdur stodst
+v_temp=X_m%*%solve(RC$Sig_xinv+t(X_m)%*%X_m/exp(t_m[2,]))%*%t(X_m) #samanburdur stodst
 
 
-varappr=as.matrix(diag(v_temp)+exp(t_m[2])); #samanburdur stodst
+varappr=as.matrix(diag(v_temp)+exp(t_m[2,])); #samanburdur stodst
                    
                    #axel/end/28.05.15
 
@@ -140,11 +140,11 @@ t4=matrix(0,4,Nit)
 
 for(j in 1:4){
   t_old=t_m
-  t=matrix(0,4,Nit)
+  t=matrix(0,nrow=4,ncol=Nit)
+  yp=matrix(0,nrow=25,ncol=Nit)
+  ypo=matrix(0,nrow=25,ncol=Nit)
   
-  t_temp=NULL
-  yp_temp=NULL
-  ypo_temp=NULL
+  D=c()
   
   
   Dens<-Denseval11(t_old,RC)
@@ -173,12 +173,16 @@ for(j in 1:4){
         ypo_old=ypo_new
         D_old=D_new
     }
-    t=rbind(t_temp,c(t_old,x_old)) #skoda thetta, mogulega adra adferd (th[,i]=as.matrix(2,1))
-    t_temp=t
-    yp=cbind(yp_temp,yp_old)
-    yp_temp=yp
-    ypo=cbind(ypo_temp,ypo_old)
-    ypo_temp=ypo
+    
+    t[,i]=rbind(t_m,x_old)
+     yp[,i]=yp_old
+     ypo[,i]=ypo_old
+#     t=rbind(t_temp,c(t_old,x_old)) #skoda thetta, mogulega adra adferd (th[,i]=as.matrix(2,1))
+#     t_temp=t
+#     yp=cbind(yp_temp,yp_old)
+#     yp_temp=yp
+#     ypo=cbind(ypo_temp,ypo_old)
+#     ypo_temp=ypo
     
     D[i]=D_old
   }
