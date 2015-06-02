@@ -20,6 +20,6 @@ geom_line(mapping=aes(l_m,upper),linetype="dashed")
 ##figure 2
 data$resid=(RC$y-X_m%*%mu)/sqrt(exp(t_m[2]))
 
-f=ggplot(data)+geom_point(aes(l_m,resid))+geom_abline(intercept = 0, slope = 0)+
+f=ggplot(data)+geom_point(aes(l_m,resid))+theme_bw()+geom_abline(intercept = 0, slope = 0)+
   geom_abline(intercept = 2, slope = 0,linetype="dashed")+geom_abline(intercept = -2, slope = 0,linetype="dashed")+ylim(-4,4)
 
