@@ -134,3 +134,95 @@ t2=matrix(0,4,Nit)
 t3=matrix(0,4,Nit)
 t4=matrix(0,4,Nit)
 
+#axel/begin/02.06.15
+
+
+
+for(j in 1:4){
+  t_old=t_m
+  t=matrix(0,4,Nit)
+  
+  t_temp=NULL
+  yp_temp=NULL
+  ypo_temp=NULL
+  
+  
+  Dens<-Denseval11(t_old,RC)
+  p_old=Dens$p
+  x_old=Dens$x
+  yp_old=Dens$yp
+  ypo_old=Dens$ypo
+  D_old=Dens$D
+  
+  for(i in 1:Nit){
+    t_new=t_old+solve(t(LH),as.matrix(rnorm(2,0,1)))
+    
+    Densnew<-Denseval11(t_new,RC)
+    p_new=Densnew$p
+    x_new=Densnew$x
+    yp_new=Densnew$yp
+    ypo_new=Densnew$ypo
+    D_new=Densnew$D
+    
+    log(R)=p_new-p_old
+    if (log(R)>log(runif(1))){
+        t_old=t_new
+        x_old=x_new
+        p_old=p_new
+        yp_old=yp_new
+        ypo_old=ypo_new
+        D_old=D_new
+    }
+    t=rbind(t_temp,c(t_old,x_old)) #skoda thetta, mogulega adra adferd (th[,i]=as.matrix(2,1))
+    t_temp=t
+    yp=cbind(yp_temp,yp_old)
+    yp_temp=yp
+    ypo=cbind(ypo_temp,ypo_old)
+    ypo_temp=ypo
+    
+    D[i]=D_old
+  }
+  
+  if(j==1)
+    t1=t
+    yp1=yp
+    ypo1=ypo
+    D1=D
+  else if(j==2)
+    t2=t
+    yp2=yp
+    ypo2=ypo
+    D2=D
+  else if(j==3)
+    t3=t
+    yp3=yp
+    ypo3=ypo
+    D3=D
+  else if(j==4)
+    t4=t
+    yp4=yp
+    ypo4=ypo
+    D4=D
+}
+  
+# for j=1:4
+# t_old=t_m;
+# t=zeros(4,Nit);
+# [p_old,x_old,yp_old,ypo_old,D_old]=DensEvalm11(t_old,RC);
+# for i=1:Nit
+# t_new=t_old+(LH'\normrnd(0,1,[2,1]));
+#         [p_new,x_new,yp_new,ypo_new,D_new]=DensEvalm11(t_new,RC);
+#         logR=p_new-p_old;
+#         if logR>log(rand(1))
+#             t_old=t_new;
+#             x_old=x_new;
+#             p_old=p_new;
+#             yp_old=yp_new;
+#             ypo_old=ypo_new;
+#             D_old=D_new;
+#         end
+#         t(:,i)=[t_old;x_old];
+#         yp(:,i)=yp_old;
+#         ypo(:,i)=ypo_old;
+#         D(1,i)=D_old;
+#     end
