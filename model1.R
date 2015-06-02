@@ -13,8 +13,6 @@ RC$sig_b=sqrt(0.48);
 RC$p_ab=-0.61;
 RC$Sig_x=rbind(c(RC$sig_a^2, RC$p_ab*RC$sig_a*RC$sig_b), c(RC$p_ab*RC$sig_a*RC$sig_b, RC$sig_b^2))
 
-#RC.mu_x=[RC.mu_a RC.mu_b]';
-#Breyting fra Matlab koda, bylt (') verdur t()
 
 RC$mu_x=as.matrix(c(RC$mu_a, RC$mu_b))
 
@@ -38,14 +36,8 @@ RC$Sinvmu=RC$Sig_xinv%*%RC$mu_x;
 
 wq = as.matrix(read.table('15.txt'))
 
-#wq=importdata([num2str(dataset) '.txt']);
 
-#Sölvi pæling
-#qwdata=read.table('15.txt')
-#names(qwdata)=c("W","Q")
-#qwdata$Qlog=log(qwdata$Q)
-#RC$qwdata=qwdata
-################
+
 RC$y=as.matrix(log(wq[,2]));
 RC$w=0.01*wq[,1]; #to meters 
 RC$w_tild=RC$w-RC$w[1];
@@ -57,9 +49,7 @@ RC$n=length(RC$y);
 #axel/begin/27.05.15
 
 
-#axel: teiknar upp punktana Q á móti H
-# figure(1);hold off;
-# scatter(RC.w,wq(:,2),'.');
+
 
 H=RC$w
 Q=wq[,2]
@@ -107,27 +97,12 @@ varappr=as.matrix(diag(v_temp)+exp(t_m[2,])); #samanburdur stodst
                    
                    #axel/end/28.05.15
 
-#              %[norminv(0.025,0,sqrt(varappr)) norminv(0.975,0,sqrt(varappr))]
-#              
-#              %Ã–ryggisbil Ã¡ logskala fyrir mÃ¦lingar (empirical bayes)
-#              %Xm*mu %<- mÃ¶t y_hat 
-#              
-#              %axel: ég kommentaði út Xm*mu hér fyrir ofan
-#              axel: norminv sama og qnorm í R
-#              
-#              [X_m*mu+norminv(0.025,0,sqrt(varappr)) X_m*mu+norminv(0.975,0,sqrt(varappr))]
 
 confinterval= cbind(X_m%*%mu+qnorm(0.025,0,sqrt(varappr)),X_m%*%mu+qnorm(0.975,0,sqrt(varappr))) #samanburdur stodst
 
 LH=t(chol(H))/(2.38/sqrt(2)) #Hvadan kemur thessi tala?? 2.38
 
-#              %LH=chol(H)'/0.42;
-# LH=chol(H)'/(2.38/sqrt(2));
-#              %LH=chol(H)';
-# t1=zeros(4,Nit); %axel: skipun í R er matrix(0,4,Nit)
-# t2=zeros(4,Nit);
-# t3=zeros(4,Nit);
-# t4=zeros(4,Nit);
+
 
 t1=matrix(0,4,Nit)
 t2=matrix(0,4,Nit)
@@ -177,12 +152,6 @@ for(j in 1:4){
     t[,i]=rbind(t_m,x_old)
      yp[,i]=yp_old
      ypo[,i]=ypo_old
-#     t=rbind(t_temp,c(t_old,x_old)) #skoda thetta, mogulega adra adferd (th[,i]=as.matrix(2,1))
-#     t_temp=t
-#     yp=cbind(yp_temp,yp_old)
-#     yp_temp=yp
-#     ypo=cbind(ypo_temp,ypo_old)
-#     ypo_temp=ypo
     
     D[i]=D_old
   }
@@ -212,16 +181,11 @@ for(j in 1:4){
 
 
 Dhat=-2*sum(log(dlnorm(exp(RC$y),X_m%*%mu,sqrt(exp(t_m[2])))))
-Davg=mean(c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)]))
+seq=seq(2000,20000,5)
+Davg=mean(c(D1[seq],D2[seq],D3[seq],D4[seq]))
 pd=Davg-Dhat
 DIC=Dhat+2*pd
-B=1/(mean(0.5*c(D1[seq(2000,20000,5)],D2[seq(2000,20000,5)],D3[seq(2000,20000,5)],D4[seq(2000,20000,5)])))
+B=1/(mean(0.5*c(D1[seq],D2[seq],D3[seq],D4[seq])))
 
-c(Dhat, Davg, DIC, pd, B) #afhverju thessi vigur?
+#c(Dhat, Davg, DIC, pd, B) #afhverju thessi vigur?
 
-# Dhat=-2*sum(log(lognpdf(exp(RC.y),X_m*mu,sqrt(exp(t_m(2))))));
-# Davg=mean([D1(2000:5:20000) D2(2000:5:20000) D3(2000:5:20000) D4(2000:5:20000)]);
-# pd=Davg-Dhat;
-# DIC=Dhat+2*pd;
-# B=1/mean(exp(0.5*[D1(2000:5:20000) D2(2000:5:20000) D3(2000:5:20000) D4(2000:5:20000)]));
-# [Dhat Davg DIC pd B]
