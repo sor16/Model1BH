@@ -40,7 +40,7 @@ wq = as.matrix(read.table('15.txt'))
 
 RC$y=as.matrix(log(wq[,2]));
 RC$w=0.01*wq[,1]; #to meters 
-RC$w_tild=RC$w-RC$w[1];
+RC$w_tild=RC$w-min(RC$w);
 RC$n=length(RC$y);
 
 #axel/end/26.05.15/virkar
@@ -64,7 +64,7 @@ ggplot(dat,aes(x=H,y=Q))+geom_point(shape=1)+theme_bw()
 
 
 #Dens =@(t)-DensEvalm11(t,RC);
-Dens <- function(th){ Denseval11(th,RC)$pmin}
+Dens <- function(th){ Densevalm11(th,RC)$pmin}
 Densmin=optim(par=c(0,0),Dens,hessian=TRUE)
 t_m=as.matrix(Densmin$par)
 H=Densmin$hessian
@@ -78,11 +78,14 @@ H=Densmin$hessian
 # 
 l_m=as.matrix(log(RC$w_tild+exp(t_m[1,]))); #samanburdur stodst
 
-X_m=cbind(matrix(1,nrow(l_m),ncol(l_m)),l_m); #samanburdur stodst
+X_m=cbind(matrix(1,nrow(l_m),ncol(l_m)),l_m)
 
-L=t(chol(RC$Sig_xinv+t(X_m)%*%X_m/exp(t_m[2,]))); #samanburdur stodst
+L=t(chol(RC$Sig_xinv+t(X_m)%*%X_m/exp(t_m[2,])))
 
-mu=solve(t(L),(solve(L,(RC$Sinvmu+t(X_m)%*%RC$y/exp(t_m[2,]))))); #samanburdur stodst
+mu=solve(t(L),(solve(L,(RC$Sinvmu+t(X_m)%*%RC$y/exp(t_m[2,])))))
+
+
+
 
 
 # hold on
@@ -122,7 +125,7 @@ for(j in 1:4){
   D=c()
   
   
-  Dens<-Denseval11(t_old,RC)
+  Dens<-Densevalm11(t_old,RC)
   p_old=Dens$p
   x_old=Dens$x
   yp_old=Dens$yp
@@ -132,7 +135,7 @@ for(j in 1:4){
   for(i in 1:Nit){
     t_new=t_old+solve(t(LH),as.matrix(rnorm(2,0,1)))
     
-    Densnew<-Denseval11(t_new,RC)
+    Densnew<-Densevalm11(t_new,RC)
     p_new=Densnew$p
     x_new=Densnew$x
     yp_new=Densnew$yp

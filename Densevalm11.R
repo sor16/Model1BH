@@ -1,5 +1,5 @@
 #Solvi begin 26.may
-Denseval11 <- function(th,RC){
+Densevalm11 <- function(th,RC){
   
   #hugsanlega onnur breytunofn
   l=log(RC$w_tild+exp(th[1]))
