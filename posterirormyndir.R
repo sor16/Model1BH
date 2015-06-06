@@ -6,7 +6,7 @@ data$fit=X_m%*%mu
 
 simdata=data.frame(fit=as.matrix(seq(min(X_m%*%mu),max(X_m%*%mu),length.out=1000)))
 simdata$fitl_m = as.matrix(seq(min(data$l_m),max(data$l_m),length.out=1000))
-simdata$Wfit=as.matrix(seq(min(log(data$W)),max(log(data$W)),length.out=1000))                   
+simdata$Wfit=seq(min(log(data$W)),max(log(data$W)),length.out=1000)
 seq=seq(2000,20000,5)
 quantypo1=ypo1[,seq]
 quantypo2=ypo2[,seq]
@@ -17,8 +17,8 @@ prctile=t(apply(quantmatrix, 2, quantile, probs = c(0.025, 0.975),  na.rm = TRUE
 data$lower=prctile[,1]
 data$upper=prctile[,2]
 
-rclog=ggplot(data)+geom_line(data=simdata, mapping=aes(fitl_m,fit))+theme_bw()+geom_point(mapping=aes(l_m,Q))+geom_line(mapping=aes(l_m,lower),linetype="dashed")+
-geom_line(mapping=aes(l_m,upper),linetype="dashed")
+rclog=ggplot(data)+geom_line(data=simdata, mapping=aes(fit,fitl_m))+theme_bw()+geom_point(mapping=aes(Q,l_m))+geom_line(mapping=aes(lower,l_m),linetype="dashed")+
+geom_line(mapping=aes(upper,l_m),linetype="dashed")
 
 ##figure 2 residual log scale
 data$residlog=(data$Q-data$fit)/sqrt(exp(t_m[2,]))
@@ -28,8 +28,9 @@ rcleiflog=ggplot(data)+geom_point(aes(l_m,residlog),color="red")+theme_bw()+geom
   ylab(expression(epsilon[i]))
 
 ##figure 6 rating curve real scale with conf interval
-rcraun=ggplot(data)+theme_bw()+geom_point(aes(exp(Q),exp(l_m)))+geom_line(data=simdata, aes(exp(fit),exp(fitl_m)))+geom_line(aes(exp(lower),exp(l_m)),linetype="dashed")+
-  geom_line(aes(exp(upper),exp(l_m)),linetype="dashed")
+rcraun=ggplot(data)+theme_bw()+geom_point(aes(exp(Q),W))+geom_line(data=simdata,aes(exp(fit),exp(fitl_m) + rep(min(RC$w)-exp(t_m[1,]),length(simdata$fit))))+
+  geom_line(aes(exp(lower),W),linetype="dashed")+geom_line(aes(exp(upper),W),linetype="dashed")
+
 
 ##residual realscale
 data$residraun=(exp(data$Q)-exp(data$fit))/sqrt(exp(t_m[2,]))

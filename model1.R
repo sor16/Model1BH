@@ -34,12 +34,18 @@ RC$Sinvmu=RC$Sig_xinv%*%RC$mu_x;
 
 #axel: 
 
-wq = as.matrix(read.table('15.txt'))
+# wq = as.matrix(read.table('15.txt'))
+
+qvdata=read.table("RM_2005_2014.txt",skip=3,sep="|")
+qvdata=qvdata[,c(2:4,7)]
+qvdata=data.frame(lapply(qvdata, as.character), stringsAsFactors=FALSE)
+qvdata[,3:4]=apply(qvdata[,c(3,4)],2, function(x) as.numeric(gsub(",",".",x)))
+names(qvdata)=c("Date","Time","Q","H")
+wq=as.matrix(qvdata[,3:4])
 
 
-
-RC$y=as.matrix(log(wq[,2]));
-RC$w=0.01*wq[,1]; #to meters 
+RC$y=as.matrix(log(wq[,1]));
+RC$w=0.01*wq[,2]; #to meters 
 RC$w_tild=RC$w-min(RC$w);
 RC$n=length(RC$y);
 
@@ -87,7 +93,6 @@ mu=solve(t(L),(solve(L,(RC$Sinvmu+t(X_m)%*%RC$y/exp(t_m[2,])))))
 
 
 
-
 # hold on
 
 plot(RC$w,exp(X_m%*%mu),type="l"); #axel: nota ggplot2? 
@@ -114,24 +119,20 @@ t4=matrix(0,4,Nit)
 
 #axel/begin/02.06.15
 
-
-
-for(j in 1:4){
-  t_old=t_m
-  t=matrix(0,nrow=4,ncol=Nit)
-  yp=matrix(0,nrow=25,ncol=Nit)
-  ypo=matrix(0,nrow=25,ncol=Nit)
+  for(j in 1:4){
   
-  D=c()
-  
-  
-  Dens<-Densevalm11(t_old,RC)
-  p_old=Dens$p
-  x_old=Dens$x
-  yp_old=Dens$yp
-  ypo_old=Dens$ypo
-  D_old=Dens$D
-  
+    t=matrix(0,nrow=4,ncol=Nit)
+    yp=matrix(0,nrow=nrow(wq),ncol=Nit)
+    ypo=matrix(0,nrow=nrow(wq),ncol=Nit)
+    D=c()
+    t_old=t_m
+    Dens<-Densevalm11(t_old,RC)
+    p_old=Dens$p
+    x_old=Dens$x
+    yp_old=Dens$yp
+    ypo_old=Dens$ypo
+    D_old=Dens$D
+    k=0
   for(i in 1:Nit){
     t_new=t_old+solve(t(LH),as.matrix(rnorm(2,0,1)))
     
@@ -144,6 +145,7 @@ for(j in 1:4){
     
     logR=p_new-p_old
     if (logR>log(runif(1))){
+        k=k+1
         t_old=t_new
         x_old=x_new
         p_old=p_new
@@ -158,6 +160,7 @@ for(j in 1:4){
     
     D[i]=D_old
   }
+  print(k)
   
   if(j==1){
     t1=t
